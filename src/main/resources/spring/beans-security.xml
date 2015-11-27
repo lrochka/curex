@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+========================================================================================================================
+beans-security.xml
+
+Copyright (c) 2015
+
+Irochka (afanasievaiv@ya.ru)
+========================================================================================================================
+-->
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+		
+	<http auto-config="true" use-expressions="true">
+	
+		<form-login login-page="/login.html"
+			authentication-failure-url="/login.html?failed=true"
+			default-target-url="/home.html" 
+			login-processing-url="/j_spring_security_check"
+            always-use-default-target="true" />
+
+		<remember-me />		
+
+		<logout logout-success-url="/login.html" />
+		
+		<access-denied-handler error-page="/accessdenied.html"/>
+		
+		<intercept-url pattern="/skin/**" filters="none" />
+		<intercept-url pattern="/styles/**" filters="none" />
+		<intercept-url pattern="/scripts/**" filters="none" />
+		<intercept-url pattern="/images/**" filters="none" />
+		<!-- Get home page -->
+		<intercept-url pattern="/login.html" method="GET" access="permitAll" />
+		<intercept-url pattern="/error.html" method="GET" access="permitAll" />
+		<!-- This requires filtering for the controller test and taglib -->
+		<!-- Clients -->
+		<intercept-url pattern="/home.html" method="GET" access="isAuthenticated()" />
+		
+		<intercept-url pattern="/companies.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/currencies.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/currencies.html" method="POST" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/clients.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/users.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/edit.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/*/edit.html" method="POST" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/new/*" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/companies/new/*" method="POST" access="hasRole('ROLE_ADMIN')"  />
+		
+		<intercept-url pattern="/cash.html" method="GET" access="hasRole('ROLE_CASH')"  />
+		<intercept-url pattern="/cashList" method="GET" access="hasRole('ROLE_CASH')"  />
+		
+		<intercept-url pattern="/remains.html" method="GET" access="hasRole('ROLE_CASH')"  />
+		<intercept-url pattern="/remainsListBGN" method="GET" access="hasRole('ROLE_CASH')"  />
+		<intercept-url pattern="/remainsListEND" method="GET" access="hasRole('ROLE_CASH')"  />
+		
+		<intercept-url pattern="/deals.html" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/dealListIN" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/dealListOUT" method="GET" access="hasRole('ROLE_USER')"  />
+		
+		<intercept-url pattern="/documents.html" method="GET" access="hasRole('ROLE_CASH')"  />
+		<intercept-url pattern="/documentListIN" method="GET" access="hasRole('ROLE_CASH')"  />
+		<intercept-url pattern="/documentListOUT" method="GET" access="hasRole('ROLE_CASH')"  />
+		
+		<intercept-url pattern="/appDocUpdate" method="GET" access="hasRole('ROLE_CASH')"  />
+		
+		<intercept-url pattern="/excel" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/excel" method="POST" access="hasRole('ROLE_ADMIN')"  />
+		
+		<intercept-url pattern="/clients.html" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clientList" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clients/*" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clients/*/edit.html" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clients/*/edit.html" method="POST" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clients/new/*" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/clients/new/*" method="POST" access="hasRole('ROLE_USER')"  />
+		
+		<intercept-url pattern="/currencies.html" method="GET" access="hasRole('ROLE_USER')"  />
+		<intercept-url pattern="/currencies/*" method="GET" access="hasRole('ROLE_USER')"  />
+		<!-- Users -->
+		<intercept-url pattern="/users.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/users/*" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/users/*/edit.html" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/users/*/edit.html" method="POST" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/users/new/*" method="GET" access="hasRole('ROLE_ADMIN')"  />
+		<intercept-url pattern="/users/new/*" method="POST" access="hasRole('ROLE_ADMIN')"  />
+			
+		<!-- Deny all policy by default, using expressions. This is part of our paranoia. This comes last since match
+		     policy is first-match. -->
+		<intercept-url pattern="/**" access="denyAll" />
+	</http>
+
+	<!--  global-method-security pre-post-annotations="enabled"-->
+		<!-- expression-handler ref="expressionHandler" /-->
+	<!-- /global-method-security-->
+	
+	<beans:bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg value="256" />
+	</beans:bean>
+
+	<!-- Better to generate a large, random salt (stored as plaintext with the user account) to make dictionary attacks
+	     harder, but this works for modest security needs. At least we are using a variable salt, which still prevents
+	     attackers from using a single rainbow table to attack the passwords. -->
+	<beans:bean id="saltSource"
+		class="org.springframework.security.authentication.dao.ReflectionSaltSource"
+		p:userPropertyToUse="id" />
+		
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailsService">
+			<password-encoder ref="passwordEncoder">
+				<salt-source ref="saltSource" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>

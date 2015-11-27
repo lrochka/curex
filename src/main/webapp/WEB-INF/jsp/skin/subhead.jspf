@@ -1,0 +1,21 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ include file="/WEB-INF/jsp/urls.jspf" %>
+
+<div id="subhd" class="yui-g">
+	<div class="yui-u">
+		<security:authorize access="isAnonymous()">
+			<div id="sessionInfo">
+				<spring:message code="subhead.welcome" /> <a href="${loginUrl}"><spring:message code="subhead.login" /></a>
+			</div>
+		</security:authorize>
+		<security:authorize access="isAuthenticated()">
+			<div id="sessionInfo">
+					<security:authentication property="principal.fullName" />.
+				<a href="${logoutUrl}"><spring:message code="subhead.logout" /></a>
+			</div>
+		</security:authorize>
+	</div>
+</div>

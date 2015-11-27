@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[3.7.0.201506251244-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[true]]></enableImports>
+	<configs>
+	</configs>
+	<autoconfigs>
+		<config>src/main/resources/spring/beans-data.xml</config>
+		<config>src/main/resources/spring/beans-security.xml</config>
+		<config>src/main/resources/spring/beans-security-special.xml</config>
+		<config>src/main/resources/spring/beans-service.xml</config>
+	</autoconfigs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
